@@ -20,77 +20,77 @@ public class Elevator {
 		floorToVisit = new ArrayList<>(maxFloor);
 	}
 
+	public byte getMaxFloor() {
+		return maxFloor;
+	}
+
 	public void callElevator(int floor) {
 		if (!floorToVisit.contains(floor)) {
 			floorToVisit.add(floor);
 			floorToVisit.sort((o1, o2) -> o1 - o2);
 			if (move == Move.STOP) {
-				runElevator();
+				firstCall();
 			}
 		}
 
 	}
 
-	private void runElevator() {
-		// if (floorToVisit.size() == 1) {
+	private void firstCall() {
 		if (floorToVisit.get(0) > actualFloor) {
 			move = Move.UP;
 		} else {
 			move = Move.DOWN;
 		}
-		// } else {
-//			int min = floorToVisit.first();
-//			int max = floorToVisit.last();
-////		}
 
 	}
 
-	private void stopElevator() {
+	private void lastCall() {
 		move = Move.STOP;
-	}
-
-	private void checkFloor() {
-		if (floorToVisit.contains(actualFloor)) {
-			try {
-				;
-				// sprawdzam czy czeka piętro powyżej w kolejce
-				Thread.sleep(3000);
-				int visitFloorIndex = floorToVisit.indexOf(actualFloor);
-				if (visitFloorIndex == floorToVisit.size() - 1) {
-					changeDirection();
-				}
-				floorToVisit.remove(actualFloor);
-				if (floorToVisit.size() > 0) {
-					changeFloor();
-				} else {
-					stopElevator();
-				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else {
-			changeFloor();
-		}
-
 	}
 
 	private void changeDirection() {
 		if (move == Move.DOWN) {
-			move = move.UP;
+			move = Move.UP;
 		} else {
-			move = move.DOWN;
+			move = Move.DOWN;
 		}
 	}
 
-	private void changeFloor() {
-		if ((move == Move.DOWN && actualFloor - 1 < 0) || (move == Move.UP && actualFloor > maxFloor + 1)) {
-			changeDirection();
+	private void checkFloor() throws InterruptedException {
+		if (floorToVisit.contains(actualFloor)) {
+			//Sprawdza jaki powinien być następny ruch windy[góra, dół, stop]
+			flowController();
+			Thread.sleep(3000);
+			floorToVisit.remove(actualFloor);
 		}
-		if (move == Move.DOWN) {
-			actualFloor--;
+
+	}
+
+	private void flowController() {
+		int maxIndex = floorToVisit.size() - 1;
+		if (maxIndex != 0) {
+			// sprawdzam czy czeka piętro powyżej lub poniżej w kolejce
+			int visitingFloorIndex = floorToVisit.indexOf(actualFloor);
+			boolean checkDown = ((visitingFloorIndex == 0) && (move == Move.DOWN));
+			boolean checkUp = ((visitingFloorIndex == maxIndex) && (move == Move.UP));
+			if (checkUp || checkDown) {
+				changeDirection();
+			}
 		} else {
-			actualFloor++;
+			// Jeżeli to ostatni element w kolejce, czyli index == 0, to zatrzymaj windę
+			lastCall();
+		}
+	}
+
+	public void runElevator() throws InterruptedException {
+		if (move != Move.STOP) {
+			if (move == Move.DOWN) {
+				actualFloor--;
+			} else {
+				actualFloor++;
+			}
+			checkFloor();
+			Thread.sleep(1000);
 		}
 	}
 
