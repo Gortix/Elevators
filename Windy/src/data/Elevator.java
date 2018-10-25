@@ -3,25 +3,40 @@ package data;
 import java.util.ArrayList;
 
 enum Move {
-	UP, DOWN, STOP
+	UP, DOWN, STOP, WAITING
 };
 
+/**
+ * @author pawel
+ *
+ */
 public class Elevator {
 	private byte actualFloor;
 	private byte maxFloor;
 	private ArrayList<Integer> floorToVisit;
 	private Move move;
+	private boolean doorOpen;
 
 	public Elevator(byte maxFloor) {
 		super();
 		this.maxFloor = maxFloor;
 		this.actualFloor = 0;
-		move = Move.STOP;
-		floorToVisit = new ArrayList<>(maxFloor);
+		this.move = Move.STOP;
+		this.floorToVisit = new ArrayList<>(maxFloor);
+		this.doorOpen= false;
 	}
 
 	public byte getMaxFloor() {
 		return maxFloor;
+	}
+	
+
+	public boolean isDoorOpen() {
+		return doorOpen;
+	}
+
+	public byte getActualFloor() {
+		return actualFloor;
 	}
 
 	public void callElevator(int floor) {
@@ -58,10 +73,12 @@ public class Elevator {
 
 	private void checkFloor() throws InterruptedException {
 		if (floorToVisit.contains(actualFloor)) {
+			doorOpen= true;
 			//Sprawdza jaki powinien być następny ruch windy[góra, dół, stop]
 			flowController();
 			Thread.sleep(3000);
 			floorToVisit.remove(actualFloor);
+			doorOpen=false;
 		}
 
 	}
