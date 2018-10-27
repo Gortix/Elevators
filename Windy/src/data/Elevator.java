@@ -1,9 +1,10 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 enum Move {
-	UP, DOWN, STOP, WAITING
+	UP, DOWN, STOP
 };
 
 /**
@@ -11,9 +12,9 @@ enum Move {
  *
  */
 public class Elevator {
-	private byte actualFloor;
-	private byte maxFloor;
-	private ArrayList<Integer> floorToVisit;
+	private int actualFloor;
+	private int maxFloor;
+	private List<Integer> floorToVisit;
 	private Move move;
 	private boolean doorOpen;
 
@@ -23,19 +24,18 @@ public class Elevator {
 		this.actualFloor = 0;
 		this.move = Move.STOP;
 		this.floorToVisit = new ArrayList<>(maxFloor);
-		this.doorOpen= false;
+		this.doorOpen = false;
 	}
 
-	public byte getMaxFloor() {
+	public int getMaxFloor() {
 		return maxFloor;
 	}
-	
 
 	public boolean isDoorOpen() {
 		return doorOpen;
 	}
 
-	public byte getActualFloor() {
+	public int getActualFloor() {
 		return actualFloor;
 	}
 
@@ -73,12 +73,16 @@ public class Elevator {
 
 	private void checkFloor() throws InterruptedException {
 		if (floorToVisit.contains(actualFloor)) {
-			doorOpen= true;
-			//Sprawdza jaki powinien być następny ruch windy[góra, dół, stop]
+			doorOpen = true;
+			// Sprawdza jaki powinien być następny ruch windy[góra, dół, stop]
 			flowController();
 			Thread.sleep(3000);
-			floorToVisit.remove(actualFloor);
-			doorOpen=false;
+
+		}
+		if (doorOpen) {
+
+			floorToVisit.remove(floorToVisit.indexOf(actualFloor));
+			doorOpen = false;
 		}
 
 	}
@@ -90,6 +94,7 @@ public class Elevator {
 			int visitingFloorIndex = floorToVisit.indexOf(actualFloor);
 			boolean checkDown = ((visitingFloorIndex == 0) && (move == Move.DOWN));
 			boolean checkUp = ((visitingFloorIndex == maxIndex) && (move == Move.UP));
+		//	boolean maxOrMinFoolr= actualFloor <= 0 || actualFloor>= maxFloor;
 			if (checkUp || checkDown) {
 				changeDirection();
 			}
@@ -100,15 +105,20 @@ public class Elevator {
 	}
 
 	public void runElevator() throws InterruptedException {
+
 		if (move != Move.STOP) {
 			if (move == Move.DOWN) {
 				actualFloor--;
 			} else {
 				actualFloor++;
 			}
+			System.out.println("floor: " + actualFloor);
+			System.out.println(floorToVisit);
 			checkFloor();
 			Thread.sleep(1000);
 		}
+		// System.out.println("floor: "+actualFloor);
+
 	}
 
 }

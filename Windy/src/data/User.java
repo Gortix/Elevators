@@ -1,21 +1,23 @@
 package data;
 
 public class User {
-	private byte startFloor;
-	private byte endFloor;
-	private byte maxFloor;
+	private int startFloor;
+	private int endFloor;
+	private int maxFloor;
 	private boolean inside;
 	private Elevator elevator;
 
 	public User(Elevator elev) {
-		super();
+
+		System.out.println("USER "+elev);
 		this.elevator = elev;
 		this.maxFloor = elev.getMaxFloor();
-		this.startFloor = (byte) Math.round(Math.random() * maxFloor);
-		this.endFloor = (byte) Math.round(Math.random() * maxFloor);
+		this.startFloor = (int) Math.round(Math.random() * maxFloor);
+		this.endFloor = (int) Math.round(Math.random() * maxFloor);
 		this.inside = false;
-
-		elev.callElevator(startFloor);
+		System.out.println(startFloor+"\n"+endFloor);
+		call();
+		//elev.call(startFloor);
 
 	}
 
@@ -31,8 +33,11 @@ public class User {
 		}
 	}
 
-	private void waiting(byte floor) {
+	private void waiting(int floor) {
+
+		System.out.print("");
 		if (elevator.isDoorOpen() && (elevator.getActualFloor() == floor)) {
+			System.out.println("jestem");
 			inside = !inside;
 			if (inside)
 				elevator.callElevator(endFloor);
