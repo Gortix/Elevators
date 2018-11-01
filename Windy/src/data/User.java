@@ -7,13 +7,16 @@ public class User {
 	private boolean inside;
 	private Elevator elevator;
 
-	public User(Elevator elev) {
+	public User(Elevator elev) throws InterruptedException {
 
 		System.out.println("USER "+elev);
 		this.elevator = elev;
-		this.maxFloor = elev.getMaxFloor();
+		this.maxFloor = elev.getMaxFloor() -1;
 		this.startFloor = (int) Math.round(Math.random() * maxFloor);
 		this.endFloor = (int) Math.round(Math.random() * maxFloor);
+		while(endFloor == startFloor) {
+			this.endFloor = (int) Math.round(Math.random() * maxFloor);
+		}
 		this.inside = false;
 		System.out.println(startFloor+"\n"+endFloor);
 		call();
@@ -21,27 +24,36 @@ public class User {
 
 	}
 
-	private void call() {
+	private void call() throws InterruptedException {
+
 		elevator.callElevator(startFloor);
+		System.out.println("wezwana");
 		//wezwanie windy gdy na zewnatrz
 		while (!inside) {
 			waiting(startFloor);
 		}
+		System.out.println("jestem");
 		//wybranie piętradoceowego
 		while (inside) {
 			waiting(endFloor);
 		}
+		System.out.println("wysiadam");
 	}
 
-	private void waiting(int floor) {
-
-		System.out.print("");
+	private void waiting(int floor) throws InterruptedException {
+		//System.out.print("a");
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (elevator.isDoorOpen() && (elevator.getActualFloor() == floor)) {
-			System.out.println("jestem");
 			inside = !inside;
 			if (inside)
 				elevator.callElevator(endFloor);
 		}
+
 
 	}
 

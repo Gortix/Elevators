@@ -13,22 +13,20 @@ enum Move {
  */
 public class Elevator {
 	private int actualFloor;
-	private int maxFloor;
-	private List<Integer> floorToVisit;
+	private boolean[] floorToVisit;
 	private Move move;
 	private boolean doorOpen;
 
-	public Elevator(byte maxFloor) {
+	public Elevator(int maxFloor) {
 		super();
-		this.maxFloor = maxFloor;
 		this.actualFloor = 0;
 		this.move = Move.STOP;
-		this.floorToVisit = new ArrayList<>(maxFloor);
+		this.floorToVisit = new boolean[maxFloor];
 		this.doorOpen = false;
 	}
 
 	public int getMaxFloor() {
-		return maxFloor;
+		return floorToVisit.length;
 	}
 
 	public boolean isDoorOpen() {
@@ -39,19 +37,18 @@ public class Elevator {
 		return actualFloor;
 	}
 
-	public void callElevator(int floor) {
-		if (!floorToVisit.contains(floor)) {
-			floorToVisit.add(floor);
-			floorToVisit.sort((o1, o2) -> o1 - o2);
-			if (move == Move.STOP) {
-				firstCall();
-			}
+	public void callElevator(int floor) throws InterruptedException {
+
+		floorToVisit[floor] = true;
+		checkFloor();
+		if (move == Move.STOP) {
+			firstCall(floor);
 		}
 
 	}
 
-	private void firstCall() {
-		if (floorToVisit.get(0) > actualFloor) {
+	private void firstCall(int floor) {
+		if (floor > actualFloor) {
 			move = Move.UP;
 		} else {
 			move = Move.DOWN;
@@ -59,65 +56,83 @@ public class Elevator {
 
 	}
 
-	private void lastCall() {
-		move = Move.STOP;
-	}
-
-	private void changeDirection() {
-		if (move == Move.DOWN) {
-			move = Move.UP;
-		} else {
-			move = Move.DOWN;
-		}
-	}
 
 	private void checkFloor() throws InterruptedException {
-		if (floorToVisit.contains(actualFloor)) {
+		if (floorToVisit[actualFloor]) {
 			doorOpen = true;
 			// Sprawdza jaki powinien być następny ruch windy[góra, dół, stop]
-			flowController();
+			checkNextStep();
 			Thread.sleep(3000);
 
 		}
 		if (doorOpen) {
-
-			floorToVisit.remove(floorToVisit.indexOf(actualFloor));
+			floorToVisit[actualFloor]= false;
 			doorOpen = false;
 		}
 
 	}
 
-	private void flowController() {
-		int maxIndex = floorToVisit.size() - 1;
-		if (maxIndex != 0) {
-			// sprawdzam czy czeka piętro powyżej lub poniżej w kolejce
-			int visitingFloorIndex = floorToVisit.indexOf(actualFloor);
-			boolean checkDown = ((visitingFloorIndex == 0) && (move == Move.DOWN));
-			boolean checkUp = ((visitingFloorIndex == maxIndex) && (move == Move.UP));
-		//	boolean maxOrMinFoolr= actualFloor <= 0 || actualFloor>= maxFloor;
-			if (checkUp || checkDown) {
-				changeDirection();
-			}
-		} else {
-			// Jeżeli to ostatni element w kolejce, czyli index == 0, to zatrzymaj windę
-			lastCall();
+	private void checkNextStep() {
+		boolean above=false;
+		boolean below=false;
+		int i= 0;
+		while(i<actualFloor && !below) {
+			if(floorToVisit[i])
+				below=true;
+			i++;
 		}
+		i=actualFloor+1;
+		while(i<floorToVisit.length && !above) {
+			if(floorToVisit[i])
+				above=true;
+			i++;
+		}
+		
+		if(!above && !below) {
+			move= Move.STOP;
+		}else if(move == Move.UP && !above) {
+			move = Move.DOWN;
+			
+		}else if(move == Move.DOWN && !below) {
+			move = Move.UP; 
+		}
+		//System.out.println(move);
+		
 	}
 
 	public void runElevator() throws InterruptedException {
-
-		if (move != Move.STOP) {
-			if (move == Move.DOWN) {
-				actualFloor--;
-			} else {
-				actualFloor++;
+		while (true) {
+			System.out.print("");
+			if (move != Move.STOP) {
+				if (move == Move.DOWN) {
+					actualFloor--;
+				} else {
+					actualFloor++;
+				}
+				System.out.println("floor: " + actualFloor);
+				//System.out.println(floorToVisit);
+				checkFloor();
+				Thread.sleep(1000);
 			}
-			System.out.println("floor: " + actualFloor);
-			System.out.println(floorToVisit);
-			checkFloor();
-			Thread.sleep(1000);
 		}
 		// System.out.println("floor: "+actualFloor);
+
+	}
+
+	public void startElevator() {
+		Thread thread = new Thread(() -> {
+
+			try {
+				runElevator();
+				System.out.print("");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		});
+		thread.setPriority(Thread.MAX_PRIORITY);
+		thread.start();
 
 	}
 
