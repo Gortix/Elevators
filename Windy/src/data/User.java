@@ -42,18 +42,18 @@ public class User {
 
 	private void waiting(int floor) throws InterruptedException {
 		//System.out.print("a");
+		
+		if (elevator.isDoorOpen() && (elevator.getActualFloor() == floor)) {
+			inside = !inside;
+			if (inside)
+				elevator.callElevator(endFloor);
+		}
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (elevator.isDoorOpen() && (elevator.getActualFloor() == floor)) {
-			inside = !inside;
-			if (inside)
-				elevator.callElevator(endFloor);
-		}
-
 
 	}
 

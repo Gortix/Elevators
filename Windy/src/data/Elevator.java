@@ -1,8 +1,5 @@
 package data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 enum Move {
 	UP, DOWN, STOP
 };
@@ -21,7 +18,7 @@ public class Elevator {
 		super();
 		this.actualFloor = 0;
 		this.move = Move.STOP;
-		this.floorToVisit = new boolean[maxFloor];
+		this.floorToVisit = new boolean[maxFloor+1];
 		this.doorOpen = false;
 	}
 
@@ -50,7 +47,7 @@ public class Elevator {
 	private void firstCall(int floor) {
 		if (floor > actualFloor) {
 			move = Move.UP;
-		} else {
+		} else if (floor < actualFloor) {
 			move = Move.DOWN;
 		}
 
