@@ -13,7 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-public class controlPanelController implements Initializable {
+public class ControlPanelController implements Initializable {
 
 	@FXML
 	private TextField floorQuantity;
