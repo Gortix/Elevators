@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+
+<HBox xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainPanelController">
+   <children>
+      <fx:include fx:id="controlPanel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="ControlPanel.fxml" HBox.hgrow="ALWAYS" />
+      <fx:include fx:id="floorView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" source="Floors.fxml" HBox.hgrow="ALWAYS" />
+   </children>
+</HBox>

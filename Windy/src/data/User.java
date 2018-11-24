@@ -11,7 +11,7 @@ public class User {
 
 		System.out.println("USER "+elev);
 		this.elevator = elev;
-		this.maxFloor = elev.getMaxFloor() -1;
+		this.maxFloor = elev.getMaxFloor();
 		this.startFloor = (int) Math.round(Math.random() * maxFloor);
 		this.endFloor = (int) Math.round(Math.random() * maxFloor);
 		while(endFloor == startFloor) {

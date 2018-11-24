@@ -23,7 +23,7 @@ public class Elevator {
 	}
 
 	public int getMaxFloor() {
-		return floorToVisit.length;
+		return floorToVisit.length -1;
 	}
 
 	public boolean isDoorOpen() {
@@ -56,15 +56,15 @@ public class Elevator {
 
 	private void checkFloor() throws InterruptedException {
 		if (floorToVisit[actualFloor]) {
+			Thread.sleep(1000);
 			doorOpen = true;
 			// Sprawdza jaki powinien być następny ruch windy[góra, dół, stop]
 			checkNextStep();
 			Thread.sleep(3000);
-
-		}
-		if (doorOpen) {
 			floorToVisit[actualFloor]= false;
 			doorOpen = false;
+			
+
 		}
 
 	}
@@ -99,7 +99,7 @@ public class Elevator {
 
 	public void runElevator() throws InterruptedException {
 		while (true) {
-			System.out.print("");
+			Thread.sleep(10);
 			if (move != Move.STOP) {
 				if (move == Move.DOWN) {
 					actualFloor--;
@@ -116,21 +116,5 @@ public class Elevator {
 
 	}
 
-	public void startElevator() {
-		Thread thread = new Thread(() -> {
-
-			try {
-				runElevator();
-				System.out.print("");
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		});
-		thread.setPriority(Thread.MAX_PRIORITY);
-		thread.start();
-
-	}
 
 }

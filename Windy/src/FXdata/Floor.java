@@ -1,37 +1,44 @@
 package FXdata;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
 
-enum Action{
-	NONE(Color.LIGHTYELLOW), ON_FLOOR(Color.LIGHTCYAN), DOOR_OPEND(Color.LIGHTGREEN);
-	
-	private Color color;
-	
-	Action(Color color){
-		this.color=color;
-	}
-	
-	public Color getActionColor() {
-		return color;
-	}
-}
+//enum Action{
+//	NONE(Color.LIGHTYELLOW), ON_FLOOR(Color.LIGHTCYAN), DOOR_OPEND(Color.LIGHTGREEN);
+//	
+//	private Color color;
+//	
+//	Action(Color color){
+//		this.color=color;
+//	}
+//	
+//	public Color getActionColor() {
+//		return color;
+//	}
+//}
 
 public class Floor {
+	public final static Integer FLOOR_EMPTY=0;
+	public final static Integer ON_FLOOR=1;
+	public final static Integer DOOR_OPENED=2;
+	
 	private IntegerProperty waitingUsers;
 	private IntegerProperty floorNumber;
-	private StringProperty elevator;
-	private Action action;
+	private IntegerProperty elevator;
+
 	
 	public Floor(int floorNumber) {
 		super();
 		this.waitingUsers = new SimpleIntegerProperty();
-		this.floorNumber = new SimpleIntegerProperty();
-		this.action = Action.NONE;
+		this.floorNumber = new SimpleIntegerProperty(floorNumber);
+		elevator= new SimpleIntegerProperty(FLOOR_EMPTY);
+		//this.action = new SimpleIntegerProperty(FLOOR_EMPTY);
 		
-		this.floorNumber.setValue(floorNumber);
 	}
 
 	public Integer getWaitingUsers() {
@@ -42,12 +49,21 @@ public class Floor {
 		this.waitingUsers.setValue(waitingUsers);;
 	}
 
-	public Action getAction() {
-		return action;
+//	public ObjectProperty<Action>  getAction() {
+//		return action;
+//	}
+//
+//	public void setAction(Action action) {
+//		
+//		this.action.setValue(action);;
+//	}
+	
+	public void setElevator(Integer value) {
+		this.elevator.set(value);
 	}
-
-	public void setAction(Action action) {
-		this.action = action;
+	
+	public Integer getElevator() {
+		return this.elevator.getValue();
 	}
 
 	public Integer getFloorNumber() {

@@ -3,6 +3,7 @@ package controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import FXdata.FloorCollection;
 import application.ApplicationManager;
 import application.ApplicationStatus;
 import javafx.beans.value.ChangeListener;
@@ -27,12 +28,35 @@ public class ControlPanelController implements Initializable {
 	@FXML
 	private Button stopButton;
 	
-	
 
+
+	public TextField getFloorQuantity() {
+		return floorQuantity;
+	}
+
+	public TextField getNumberOfUsers() {
+		return numberOfUsers;
+	}
+
+	public Button getStartButton() {
+		return startButton;
+	}
+
+	public Button getStopButton() {
+		return stopButton;
+	}
+
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println("initialized");
+		System.out.println("initialized control panel");
+		configureFields();
+		
+	};
 
+
+	
+	private void configureFields() {
 		floorQuantity.textProperty().addListener(new ChangeListener<String>() {
 
 			@Override
@@ -54,26 +78,6 @@ public class ControlPanelController implements Initializable {
 			}
 
 		});
-	};
-
-	@FXML
-	public void runApplication(ActionEvent event) {
-
-		int floors = Integer.valueOf(floorQuantity.getText());
-		ApplicationManager.createElevator(floors);
-		
-		
-		int users = Integer.valueOf(numberOfUsers.getText());
-		ApplicationManager.createUsers(users);
-		ApplicationManager.setStatus(ApplicationStatus.START);
-
-	}
-
-	public void stopApplication(ActionEvent event) {
-
-		ApplicationManager.setStatus(ApplicationStatus.STOP);
-		System.out.println(ApplicationManager.getStatus());
-
 	}
 
 }
