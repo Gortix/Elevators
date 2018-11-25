@@ -1,5 +1,7 @@
 package FXdata;
 
+import java.util.HashMap;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -8,19 +10,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
 
-//enum Action{
-//	NONE(Color.LIGHTYELLOW), ON_FLOOR(Color.LIGHTCYAN), DOOR_OPEND(Color.LIGHTGREEN);
-//	
-//	private Color color;
-//	
-//	Action(Color color){
-//		this.color=color;
-//	}
-//	
-//	public Color getActionColor() {
-//		return color;
-//	}
-//}
 
 public class Floor {
 	public final static Integer FLOOR_EMPTY=0;
@@ -29,15 +18,18 @@ public class Floor {
 	
 	private IntegerProperty waitingUsers;
 	private IntegerProperty floorNumber;
-	private IntegerProperty elevator;
+//	private IntegerProperty elevator;
+	private ObjectProperty<HashMap<String, Integer>> elevator;
 
 	
 	public Floor(int floorNumber) {
 		super();
 		this.waitingUsers = new SimpleIntegerProperty();
 		this.floorNumber = new SimpleIntegerProperty(floorNumber);
-		elevator= new SimpleIntegerProperty(FLOOR_EMPTY);
-		//this.action = new SimpleIntegerProperty(FLOOR_EMPTY);
+		HashMap<String, Integer> elevatorMap= new HashMap<>();
+		elevatorMap.put("action", FLOOR_EMPTY);
+		elevatorMap.put("users", 0);
+		elevator= new SimpleObjectProperty<>(elevatorMap);
 		
 	}
 
@@ -45,24 +37,26 @@ public class Floor {
 		return waitingUsers.getValue();
 	}
 
-	public void setWaitingUsers(int waitingUsers) {
-		this.waitingUsers.setValue(waitingUsers);;
+	public void addWaitingUser() {
+		Integer users= waitingUsers.get();
+		this.waitingUsers.setValue(users +1);
+	}
+	
+	public void clearWaitingUsers() {
+		this.waitingUsers.setValue(0);
 	}
 
-//	public ObjectProperty<Action>  getAction() {
-//		return action;
-//	}
-//
-//	public void setAction(Action action) {
-//		
-//		this.action.setValue(action);;
-//	}
 	
-	public void setElevator(Integer value) {
+	public void setElevator(HashMap<String, Integer> value) {
 		this.elevator.set(value);
 	}
 	
-	public Integer getElevator() {
+//	public Integer getElevator() {
+//		return this.elevator.getValue();
+//	}
+	
+	public HashMap<String, Integer> getElevator() {
+		 
 		return this.elevator.getValue();
 	}
 

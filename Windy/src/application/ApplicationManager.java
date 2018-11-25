@@ -1,13 +1,13 @@
 package application;
 
-import java.util.List;
+import java.util.HashMap;
 
 import FXdata.Floor;
 import FXdata.FloorCollection;
-import controllers.FloorViewController;
 import data.Elevator;
 import data.User;
 import javafx.scene.control.TableView;
+import javafx.scene.text.Text;
 
 public class ApplicationManager {
 	private static Elevator elevator;
@@ -37,8 +37,9 @@ public class ApplicationManager {
 			try {
 				while (status == ApplicationStatus.START) {
 					User user = new User(elevator);
+					FloorCollection.getFloors().get(user.getStartFloor()).addWaitingUser();
+					user.call();
 					int time = (int) (Math.random() * 15000);
-					System.out.println("TIME: " + time);
 					Thread.sleep(time);
 				}
 			} catch (InterruptedException e) {
@@ -71,38 +72,52 @@ public class ApplicationManager {
 	}
 	
 	public static void createFloors(int count) {
+		FloorCollection.clear();
 		for(int i=0; i <= count;i++) {
 			FloorCollection.addFloor(new Floor(i));
 		}
 			
 	}
 	
-	public static void runTableSync(TableView<Floor> tab) {
+	public static <T> void runTableSync(TableView<T> tab, Text people) {
 		Thread thread = new Thread(() -> {
 			int actualFloor=0;
 			boolean doorOpend= false;
 			Floor floor = FloorCollection.getFloors().get(actualFloor);
+//			HashMap<String, Integer> floor = FloorCollection.getFloors();
 			while(elevator != null) {
-				System.out.print("");
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(actualFloor != elevator.getActualFloor()) {
 					//FloorCollection.getFloors().get(actualFloor).setElevator(Floor.FLOOR_EMPTY);; 
 					actualFloor= elevator.getActualFloor();
-					floor.setElevator(Floor.FLOOR_EMPTY);
+					floor.getElevator().put("action",Floor.FLOOR_EMPTY);
+//					floor.setElevator(Floor.FLOOR_EMPTY);
 					floor = FloorCollection.getFloors().get(actualFloor); 
-					floor.setElevator(Floor.ON_FLOOR);
+					floor.getElevator().put("action",Floor.ON_FLOOR);
+					//floor.setElevator(Floor.ON_FLOOR);
 				//	System.out.println(FloorCollection.getFloors().get(actualFloor));
 					//FloorViewController.refresh();
 					
+					
 				}
 				if(elevator.isDoorOpen() != doorOpend) {
-					System.out.println("Door");
 					doorOpend= !doorOpend;
 					if(doorOpend) {
-						floor.setElevator(Floor.DOOR_OPENED);
+						floor.getElevator().put("action",Floor.DOOR_OPENED);
+//						floor.setElevator(Floor.DOOR_OPENED);
+						floor.clearWaitingUsers();
 					}else{
-						floor.setElevator(Floor.ON_FLOOR);
+						floor.getElevator().put("action",Floor.ON_FLOOR);
+//						floor.setElevator(Floor.ON_FLOOR);
 					}
 				}
+				floor.getElevator().put("users", elevator.getPassengers());
+//				people.textProperty().set(String.valueOf(elevator.getPassengers()) );
 				tab.refresh();
 				
 				

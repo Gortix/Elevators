@@ -1,10 +1,12 @@
 package controllers;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import FXdata.Floor;
 import FXdata.FloorCollection;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
@@ -30,23 +32,15 @@ public class FloorViewController implements Initializable  {
 		return contentTable;
 	}
 
-	public void setContentTable() {
-		this.contentTable.setItems(FloorCollection.getFloors());
+	public void setContentTable(ObservableList<Floor> floors) {
+		this.contentTable.setItems(floors);
 	}
 	
 	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		//coll= new FloorCollection();
 		configureTable();
-//		FloorCollection.getInstance().addFloor(new Floor(0));
-//		FloorCollection.getInstance().addFloor(new Floor(1));
-//		FloorCollection.getInstance().addFloor(new Floor(2));
-//		
-//		contentTable.setItems(FloorCollection.getInstance().getFloors());
-//		FloorCollection.getInstance().getFloors().get(0).setElevator(Floor.DOOR_OPENED);
 		
 	}
 	
@@ -68,19 +62,21 @@ public class FloorViewController implements Initializable  {
 		elevator.setCellFactory(        
         new Callback<TableColumn<Floor, Integer>, TableCell<Floor, Integer>>() {
             public TableCell call(TableColumn p) {
-                TableCell cell = new TableCell<Floor, Integer>() {
+                TableCell cell = new TableCell<Floor, HashMap<String,Integer>>() {
                     @Override
-                    public void updateItem(Integer item, boolean empty) {
+                    public void updateItem(HashMap<String,Integer> item, boolean empty) {
                         super.updateItem(item, empty);
-                    	String cl="";
-                        if(item != null && item == Floor.FLOOR_EMPTY) {
+                    	//String cl="";
+                        if(item != null && item.get("action") == Floor.FLOOR_EMPTY) {
                         	setStyle("-fx-background-color: #ffffe0ff");
-                        	
-                        }else if(item != null && item == Floor.ON_FLOOR) {
+                        	setText("");
+                        }else if(item != null && item.get("action")== Floor.ON_FLOOR) {
                         	setStyle("-fx-background-color:#e0ffffff");
-                        }else if(item != null && item == Floor.DOOR_OPENED) {
+                        	setText(item.get("users")+"");
+                        }else if(item != null && item.get("action")== Floor.DOOR_OPENED) {
                         	setStyle("-fx-background-color:#90ee90ff");
-                    }
+                        	setText(item.get("users")+"");
+                        }
                         
                        
                     }

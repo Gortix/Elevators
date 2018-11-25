@@ -26,14 +26,5 @@ public class FloorCollection {
 	
 	
 	
-	//private static void setInstance(FloorCollection instance) {}
-
-//	public static FloorCollection getInstance() {
-//		if(instance == null) {
-//			instance= new FloorCollection();
-//		}
-//		return null;
-//		
-//	}
 	
 }

@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 public class MainPanelController implements Initializable {
 	
@@ -36,6 +37,7 @@ public class MainPanelController implements Initializable {
 		Button startButton = controlPanelController.getStartButton();
 		TextField floorQuantity = controlPanelController.getFloorQuantity();
 		TextField numberOfUsers = controlPanelController.getNumberOfUsers();
+		Text userInElevator = controlPanelController.getUserInElevator();
 		Button stopButton = controlPanelController.getStopButton();
 		
 		
@@ -46,8 +48,8 @@ public class MainPanelController implements Initializable {
 				int floors = Integer.valueOf(floorQuantity.getText());
 				ApplicationManager.createElevator(floors);
 				ApplicationManager.createFloors(floors);
-				floorViewController.setContentTable();
-				ApplicationManager.runTableSync(floorViewController.getContentTable());
+				floorViewController.setContentTable(FloorCollection.getFloors());
+				ApplicationManager.runTableSync(floorViewController.getContentTable(),userInElevator);
 				
 				
 				int users = Integer.valueOf(numberOfUsers.getText());

@@ -13,6 +13,7 @@ public class Elevator {
 	private boolean[] floorToVisit;
 	private Move move;
 	private boolean doorOpen;
+	private int passengers;
 
 	public Elevator(int maxFloor) {
 		super();
@@ -20,7 +21,24 @@ public class Elevator {
 		this.move = Move.STOP;
 		this.floorToVisit = new boolean[maxFloor+1];
 		this.doorOpen = false;
+		this.passengers=0;
 	}
+	
+
+	public int getPassengers() {
+		return passengers;
+	}
+
+
+	public void addPassenger() {
+		this.passengers++;
+	}
+	
+	public void substractPassenger() {
+		this.passengers--;
+	}
+
+
 
 	public int getMaxFloor() {
 		return floorToVisit.length -1;

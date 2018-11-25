@@ -19,12 +19,20 @@ public class User {
 		}
 		this.inside = false;
 		System.out.println(startFloor+"\n"+endFloor);
-		call();
+		//call();
 		//elev.call(startFloor);
 
 	}
+	
+	
 
-	private void call() throws InterruptedException {
+	public int getStartFloor() {
+		return startFloor;
+	}
+
+
+
+	public void call() throws InterruptedException {
 
 		elevator.callElevator(startFloor);
 		System.out.println("wezwana");
@@ -33,7 +41,7 @@ public class User {
 			waiting(startFloor);
 		}
 		System.out.println("jestem");
-		//wybranie piętradoceowego
+		//wybranie piętra docelowego
 		while (inside) {
 			waiting(endFloor);
 		}
@@ -45,15 +53,15 @@ public class User {
 		
 		if (elevator.isDoorOpen() && (elevator.getActualFloor() == floor)) {
 			inside = !inside;
-			if (inside)
+			if (inside) {
+				elevator.addPassenger();
 				elevator.callElevator(endFloor);
+			}else {
+				elevator.substractPassenger();
+			}
 		}
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Thread.sleep(100);
+
 
 	}
 

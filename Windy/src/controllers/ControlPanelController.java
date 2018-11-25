@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 public class ControlPanelController implements Initializable {
 
@@ -27,6 +28,9 @@ public class ControlPanelController implements Initializable {
 
 	@FXML
 	private Button stopButton;
+	
+	@FXML
+    private Text userInElevator;
 	
 
 
@@ -47,6 +51,11 @@ public class ControlPanelController implements Initializable {
 	}
 
 	
+	public Text getUserInElevator() {
+		return userInElevator;
+	}
+
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		System.out.println("initialized control panel");
