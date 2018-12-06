@@ -103,6 +103,12 @@ public class ApplicationManager {
 				}
 				floor.getElevator().put("users", elevator.getPassengers());
 				tab.refresh();
+				try {
+					Thread.sleep(250);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 				
 			}
