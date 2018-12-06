@@ -35,7 +35,7 @@ public class Floor {
 		return waitingUsers.getValue();
 	}
 
-	public void addWaitingUser() {
+	public synchronized void addWaitingUser() {
 		Integer users= waitingUsers.get();
 		this.waitingUsers.setValue(users +1);
 	}

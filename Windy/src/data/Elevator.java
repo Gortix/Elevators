@@ -30,11 +30,11 @@ public class Elevator {
 	}
 
 
-	public void addPassenger() {
+	public synchronized void addPassenger() {
 		this.passengers++;
 	}
 	
-	public void substractPassenger() {
+	public synchronized void substractPassenger() {
 		this.passengers--;
 	}
 
@@ -52,7 +52,7 @@ public class Elevator {
 		return actualFloor;
 	}
 
-	public synchronized void  callElevator(int floor) throws InterruptedException {
+	public void  callElevator(int floor) throws InterruptedException {
 
 		floorToVisit[floor] = true;
 		checkFloor();

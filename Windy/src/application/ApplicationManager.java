@@ -21,9 +21,13 @@ public class ApplicationManager {
 	}
 	
 	public static void createUsers(int numberOfUsers) {
-
+			if(users != null) {
+				for(Thread th:users) {
+					th.interrupt();
+				}
+			}
 			users = new Thread[numberOfUsers];
-
+			
 
 		for (int i = 0; i < numberOfUsers; i++) {
 			users[i] = createOneUser();
