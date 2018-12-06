@@ -1,13 +1,11 @@
 package application;
 
-import java.util.HashMap;
 
 import FXdata.Floor;
 import FXdata.FloorCollection;
 import data.Elevator;
 import data.User;
 import javafx.scene.control.TableView;
-import javafx.scene.text.Text;
 
 public class ApplicationManager {
 	private static Elevator elevator;
@@ -23,9 +21,9 @@ public class ApplicationManager {
 	}
 	
 	public static void createUsers(int numberOfUsers) {
-		if (users == null) {
+
 			users = new Thread[numberOfUsers];
-		}
+
 
 		for (int i = 0; i < numberOfUsers; i++) {
 			users[i] = createOneUser();
@@ -53,7 +51,7 @@ public class ApplicationManager {
 	}
 
 	public static void createElevator(int numberOfFloors) {
-		if (elevator == null) {
+
 			elevator = new Elevator(numberOfFloors);
 			status = ApplicationStatus.START;
 			Thread thread = new Thread(() -> {
@@ -68,7 +66,7 @@ public class ApplicationManager {
 			});
 			thread.setPriority(Thread.MAX_PRIORITY);
 			thread.start();
-		}
+
 	}
 	
 	public static void createFloors(int count) {
@@ -79,29 +77,18 @@ public class ApplicationManager {
 			
 	}
 	
-	public static <T> void runTableSync(TableView<T> tab, Text people) {
+	public static <T> void runTableSync(TableView<T> tab) {
 		Thread thread = new Thread(() -> {
-			int actualFloor=0;
+			int actualFloor=1;
 			boolean doorOpend= false;
 			Floor floor = FloorCollection.getFloors().get(actualFloor);
-//			HashMap<String, Integer> floor = FloorCollection.getFloors();
 			while(elevator != null) {
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				if(actualFloor != elevator.getActualFloor()) {
-					//FloorCollection.getFloors().get(actualFloor).setElevator(Floor.FLOOR_EMPTY);; 
 					actualFloor= elevator.getActualFloor();
 					floor.getElevator().put("action",Floor.FLOOR_EMPTY);
-//					floor.setElevator(Floor.FLOOR_EMPTY);
 					floor = FloorCollection.getFloors().get(actualFloor); 
 					floor.getElevator().put("action",Floor.ON_FLOOR);
-					//floor.setElevator(Floor.ON_FLOOR);
-				//	System.out.println(FloorCollection.getFloors().get(actualFloor));
-					//FloorViewController.refresh();
+
 					
 					
 				}
@@ -109,15 +96,12 @@ public class ApplicationManager {
 					doorOpend= !doorOpend;
 					if(doorOpend) {
 						floor.getElevator().put("action",Floor.DOOR_OPENED);
-//						floor.setElevator(Floor.DOOR_OPENED);
 						floor.clearWaitingUsers();
 					}else{
 						floor.getElevator().put("action",Floor.ON_FLOOR);
-//						floor.setElevator(Floor.ON_FLOOR);
 					}
 				}
 				floor.getElevator().put("users", elevator.getPassengers());
-//				people.textProperty().set(String.valueOf(elevator.getPassengers()) );
 				tab.refresh();
 				
 				

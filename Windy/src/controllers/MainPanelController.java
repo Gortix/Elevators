@@ -3,7 +3,7 @@ package controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import FXdata.Floor;
+
 import FXdata.FloorCollection;
 import application.ApplicationManager;
 import application.ApplicationStatus;
@@ -11,9 +11,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
+
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 
 public class MainPanelController implements Initializable {
@@ -34,42 +34,44 @@ public class MainPanelController implements Initializable {
 	
 	@FXML
 	public void configureButtons() {
-		Button startButton = controlPanelController.getStartButton();
+		ToggleButton controlButton = controlPanelController.getControlButton();
 		TextField floorQuantity = controlPanelController.getFloorQuantity();
 		TextField numberOfUsers = controlPanelController.getNumberOfUsers();
-		Text userInElevator = controlPanelController.getUserInElevator();
-		Button stopButton = controlPanelController.getStopButton();
+		Text infoText = controlPanelController.getInfoText();
 		
 		
-		startButton.setOnAction(new EventHandler<ActionEvent>() {
+		controlButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				int floors = Integer.valueOf(floorQuantity.getText());
-				ApplicationManager.createElevator(floors);
-				ApplicationManager.createFloors(floors);
-				floorViewController.setContentTable(FloorCollection.getFloors());
-				ApplicationManager.runTableSync(floorViewController.getContentTable(),userInElevator);
-				
-				
-				int users = Integer.valueOf(numberOfUsers.getText());
-				ApplicationManager.createUsers(users);
-				ApplicationManager.setStatus(ApplicationStatus.START);
+				if(controlButton.isSelected()){
+					FloorCollection.clear();
+					int floors = Integer.valueOf(floorQuantity.getText());
+					ApplicationManager.createElevator(floors);
+					ApplicationManager.createFloors(floors);
+					floorViewController.setContentTable(FloorCollection.getFloors());
+					ApplicationManager.runTableSync(floorViewController.getContentTable());
+					
+					
+					int users = Integer.valueOf(numberOfUsers.getText());
+					ApplicationManager.createUsers(users);
+					ApplicationManager.setStatus(ApplicationStatus.START);
+					controlButton.setText("Stop");
+					infoText.setText("");
+				}else {
+					ApplicationManager.setStatus(ApplicationStatus.STOP);
+					
+					System.out.println(ApplicationManager.getStatus());
+					controlButton.setText("Start");
+					infoText.setText("Aplikacja zatrzyma się po zakończeniu podróży przez wszystkich użytkowników");
+				}
 				
 			}
 			
 			
 		});
 		
-		stopButton.setOnAction(new EventHandler<ActionEvent>() {
 
-			@Override
-			public void handle(ActionEvent event) {
-				ApplicationManager.setStatus(ApplicationStatus.STOP);
-				System.out.println(ApplicationManager.getStatus());
-				
-			}
-		});
 
 	}
 

@@ -1,3 +1,5 @@
+package application;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -15,7 +17,6 @@ public class Main extends Application {
 		try {
 			Parent root = (Parent)FXMLLoader.load(getClass().getResource("/view/MainPanel.fxml"));
 			Scene scene = new Scene(root);
-			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

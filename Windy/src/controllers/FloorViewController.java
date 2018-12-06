@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import FXdata.Floor;
-import FXdata.FloorCollection;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,8 +12,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
+
 import javafx.util.Callback;
 
 public class FloorViewController implements Initializable  {
@@ -22,11 +20,6 @@ public class FloorViewController implements Initializable  {
     @FXML
     private  TableView<Floor> contentTable;
     
-    
-//    private FloorCollection coll;
-//    public static void refresh() {
-//    	contentTable.refresh();
-//    }
 
 	public TableView<Floor> getContentTable() {
 		return contentTable;
@@ -55,12 +48,11 @@ public class FloorViewController implements Initializable  {
 		
 		
 		TableColumn<Floor, Integer> elevator = new TableColumn<>("Winda");
-//		elevator.setCellValueFactory(x-> x.getValue().getAction());
 		elevator.setCellValueFactory(new PropertyValueFactory<>("elevator"));
 		
 		
 		elevator.setCellFactory(        
-        new Callback<TableColumn<Floor, Integer>, TableCell<Floor, Integer>>() {
+				new Callback<TableColumn<Floor, Integer>, TableCell<Floor, Integer>>() {
             public TableCell call(TableColumn p) {
                 TableCell cell = new TableCell<Floor, HashMap<String,Integer>>() {
                     @Override

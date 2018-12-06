@@ -1,18 +1,16 @@
 package controllers;
 
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import FXdata.FloorCollection;
-import application.ApplicationManager;
-import application.ApplicationStatus;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 
 public class ControlPanelController implements Initializable {
@@ -24,13 +22,12 @@ public class ControlPanelController implements Initializable {
 	private TextField numberOfUsers;
 
 	@FXML
-	private Button startButton;
-
-	@FXML
-	private Button stopButton;
+	private ToggleButton controlButton;
 	
 	@FXML
-    private Text userInElevator;
+	private Text infoText;
+
+	
 	
 
 
@@ -42,23 +39,21 @@ public class ControlPanelController implements Initializable {
 		return numberOfUsers;
 	}
 
-	public Button getStartButton() {
-		return startButton;
+	public ToggleButton getControlButton() {
+		return controlButton;
 	}
-
-	public Button getStopButton() {
-		return stopButton;
-	}
-
 	
-	public Text getUserInElevator() {
-		return userInElevator;
+	public Text getInfoText() {
+		return infoText;
 	}
+
+
+
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		System.out.println("initialized control panel");
+		System.out.println("Control panel initialized");
 		configureFields();
 		
 	};

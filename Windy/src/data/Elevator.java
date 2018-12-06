@@ -52,7 +52,7 @@ public class Elevator {
 		return actualFloor;
 	}
 
-	public void callElevator(int floor) throws InterruptedException {
+	public synchronized void  callElevator(int floor) throws InterruptedException {
 
 		floorToVisit[floor] = true;
 		checkFloor();
@@ -117,21 +117,18 @@ public class Elevator {
 
 	public void runElevator() throws InterruptedException {
 		while (true) {
-			Thread.sleep(10);
+			Thread.sleep(1000);
 			if (move != Move.STOP) {
 				if (move == Move.DOWN) {
 					actualFloor--;
 				} else {
 					actualFloor++;
 				}
-				System.out.println("floor: " + actualFloor);
-				//System.out.println(floorToVisit);
+				//System.out.println("floor: " + actualFloor);
 				checkFloor();
-				Thread.sleep(1000);
+				
 			}
 		}
-		// System.out.println("floor: "+actualFloor);
-
 	}
 
 

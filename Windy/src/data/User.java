@@ -9,7 +9,6 @@ public class User {
 
 	public User(Elevator elev) throws InterruptedException {
 
-		System.out.println("USER "+elev);
 		this.elevator = elev;
 		this.maxFloor = elev.getMaxFloor();
 		this.startFloor = (int) Math.round(Math.random() * maxFloor);
@@ -18,7 +17,7 @@ public class User {
 			this.endFloor = (int) Math.round(Math.random() * maxFloor);
 		}
 		this.inside = false;
-		System.out.println(startFloor+"\n"+endFloor);
+		//System.out.println(startFloor+"\n"+endFloor);
 		//call();
 		//elev.call(startFloor);
 
@@ -35,17 +34,17 @@ public class User {
 	public void call() throws InterruptedException {
 
 		elevator.callElevator(startFloor);
-		System.out.println("wezwana");
+	//	System.out.println("wezwana");
 		//wezwanie windy gdy na zewnatrz
 		while (!inside) {
 			waiting(startFloor);
 		}
-		System.out.println("jestem");
+//		System.out.println("jestem");
 		//wybranie piętra docelowego
 		while (inside) {
 			waiting(endFloor);
 		}
-		System.out.println("wysiadam");
+	//	System.out.println("wysiadam");
 	}
 
 	private void waiting(int floor) throws InterruptedException {

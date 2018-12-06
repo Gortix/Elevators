@@ -21,7 +21,7 @@ public class FloorCollection {
 	}
 
 	private FloorCollection() {
-		this.floorList = FXCollections.observableArrayList();
+		floorList = FXCollections.observableArrayList();
 	}
 	
 	
