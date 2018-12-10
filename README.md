@@ -3,4 +3,4 @@ Aplikacja ma za zadanie symulować funkcjonowanie windy. Wybierz ilość pięter
 
 ///////
 
-The application simulates how elevator works. Choose floors number and users to see how it working.
+The application simulates how elevator works. Choose number of floors and users to see how it working.
